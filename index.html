@@ -1,0 +1,476 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>News Aggregator</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+
+            body {
+                background-color: #f0f2f5;
+            }
+
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+
+            /* Login and Register Page Styles */
+            .auth-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                background-color: #f0f2f5;
+            }
+
+            .auth-card {
+                background: white;
+                padding: 40px;
+                border-radius: 10px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                width: 100%;
+                max-width: 400px;
+            }
+
+            .auth-header {
+                text-align: center;
+                margin-bottom: 30px;
+            }
+
+            .auth-header h1 {
+                color: #1a73e8;
+                margin-bottom: 10px;
+            }
+
+            .input-group {
+                margin-bottom: 20px;
+            }
+
+            .input-group label {
+                display: block;
+                margin-bottom: 5px;
+                color: #555;
+            }
+
+            .input-group input {
+                width: 100%;
+                padding: 12px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                font-size: 16px;
+            }
+
+            .error-message {
+                color: #dc3545;
+                margin-bottom: 15px;
+                display: none;
+            }
+
+            .success-message {
+                color: #28a745;
+                margin-bottom: 15px;
+                display: none;
+            }
+
+            .auth-switch {
+                margin-top: 20px;
+                text-align: center;
+            }
+
+            .auth-switch a {
+                color: #1a73e8;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+            /* Home Page Styles */
+            .home-page {
+                display: none;
+            }
+
+            .header {
+                background: white;
+                padding: 15px 0;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                margin-bottom: 30px;
+            }
+
+            .header-content {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .welcome-text {
+                color: #666;
+                margin-right: 20px;
+            }
+
+            .header-right {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .logo {
+                font-size: 24px;
+                color: #1a73e8;
+                font-weight: bold;
+            }
+
+            .categories {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 20px;
+                margin-bottom: 30px;
+            }
+
+            .category-btn {
+                padding: 15px 30px;
+                font-size: 18px;
+                border: none;
+                border-radius: 5px;
+                background: white;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+
+            .category-btn:hover {
+                background: #1a73e8;
+                color: white;
+            }
+
+            .category-btn.active {
+                background: #1a73e8;
+                color: white;
+            }
+
+            .news-container {
+                display: grid;
+                gap: 20px;
+            }
+
+            .news-card {
+                background: white;
+                padding: 20px;
+                border-radius: 5px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+
+            .news-card h3 {
+                color: #333;
+                margin-bottom: 10px;
+            }
+
+            .news-card p {
+                color: #666;
+                line-height: 1.5;
+            }
+
+            button {
+                background: #1a73e8;
+                color: white;
+                padding: 12px 24px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 16px;
+                transition: background 0.3s ease;
+            }
+
+            button:hover {
+                background: #1557b0;
+            }
+
+            .logout-btn {
+                background: transparent;
+                color: #1a73e8;
+                border: 1px solid #1a73e8;
+            }
+
+            .logout-btn:hover {
+                background: #f0f2f5;
+            }
+
+            @media (max-width: 768px) {
+                .container {
+                    padding: 10px;
+                }
+
+                .auth-card {
+                    margin: 20px;
+                    padding: 20px;
+                }
+
+                .categories {
+                    grid-template-columns: 1fr;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Login Page -->
+        <div class="auth-container" id="loginPage">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <h1>News Aggregator</h1>
+                    <p>Sign in to continue</p>
+                </div>
+                <form id="loginForm">
+                    <div class="input-group">
+                        <label for="loginUsername">Username</label>
+                        <input type="text" id="loginUsername" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" required>
+                    </div>
+                    <div class="error-message" id="loginError">
+                        Invalid username or password
+                    </div>
+                    <button type="submit">Login</button>
+                </form>
+                <div class="auth-switch">
+                    <p>Don't have an account? <a id="showRegister">Register</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Register Page -->
+        <div class="auth-container" id="registerPage" style="display: none;">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <h1>News Aggregator</h1>
+                    <p>Create a new account</p>
+                </div>
+                <form id="registerForm">
+                    <div class="input-group">
+                        <label for="registerUsername">Username</label>
+                        <input type="text" id="registerUsername" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="registerEmail">Email</label>
+                        <input type="email" id="registerEmail" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="registerPassword">Password</label>
+                        <input type="password" id="registerPassword" required>
+                    </div>
+                    <div class="error-message" id="registerError">
+                        Registration failed
+                    </div>
+                    <div class="success-message" id="registerSuccess">
+                        Registration successful! Please login.
+                    </div>
+                    <button type="submit">Register</button>
+                </form>
+                <div class="auth-switch">
+                    <p>Already have an account? <a id="showLogin">Login</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Home Page -->
+        <div class="home-page" id="homePage">
+            <header class="header">
+                <div class="container">
+                    <div class="header-content">
+                        <div class="logo">News Aggregator</div>
+                        <div class="header-right">
+                            <span class="welcome-text" id="welcomeMessage"></span>
+                            <button class="logout-btn" id="logoutBtn">Logout</button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="container">
+                <div class="categories">
+                    <button class="category-btn" data-category="sports">Sports</button>
+                    <button class="category-btn" data-category="entertainment">Entertainment</button>
+                    <button class="category-btn" data-category="politics">Politics</button>
+                </div>
+
+                <div class="news-container" id="newsContainer"></div>
+            </main>
+        </div>
+
+        <script>
+            // Sample news data
+            const newsData = {
+                sports: [
+                    { title: "Major Upset in Championship Final", content: "Underdog team claims victory in dramatic fashion..." },
+                    { title: "New Record Set in Athletics", content: "World record broken in international competition..." },
+                    { title: "Transfer Season Updates", content: "Latest developments in player transfers..." }
+                ],
+                entertainment: [
+                    { title: "Blockbuster Movie Release", content: "Highly anticipated film breaks box office records..." },
+                    { title: "Celebrity Wedding Announcement", content: "Hollywood stars tie the knot in private ceremony..." },
+                    { title: "Music Festival Lineup Revealed", content: "Major artists confirmed for summer festival..." }
+                ],
+                politics: [
+                    { title: "Key Policy Changes Announced", content: "Government introduces new legislative reforms..." },
+                    { title: "International Summit Results", content: "World leaders reach agreement on major issues..." },
+                    { title: "Election Campaign Updates", content: "Latest developments in political race..." }
+                ]
+            };
+
+            // DOM Elements
+            const loginPage = document.getElementById('loginPage');
+            const registerPage = document.getElementById('registerPage');
+            const homePage = document.getElementById('homePage');
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            const loginError = document.getElementById('loginError');
+            const registerError = document.getElementById('registerError');
+            const registerSuccess = document.getElementById('registerSuccess');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const newsContainer = document.getElementById('newsContainer');
+            const categoryButtons = document.querySelectorAll('.category-btn');
+            const welcomeMessage = document.getElementById('welcomeMessage');
+            const showRegister = document.getElementById('showRegister');
+            const showLogin = document.getElementById('showLogin');
+
+            // Check if user is already logged in
+            document.addEventListener('DOMContentLoaded', checkLoggedInStatus);
+
+            // Event Listeners
+            loginForm.addEventListener('submit', handleLogin);
+            registerForm.addEventListener('submit', handleRegister);
+            logoutBtn.addEventListener('click', handleLogout);
+            showRegister.addEventListener('click', () => switchAuthPage('register'));
+            showLogin.addEventListener('click', () => switchAuthPage('login'));
+            categoryButtons.forEach(button => {
+                button.addEventListener('click', handleCategoryClick);
+            });
+
+            // Switch between login and register pages
+            function switchAuthPage(page) {
+                if (page === 'register') {
+                    loginPage.style.display = 'none';
+                    registerPage.style.display = 'flex';
+                    homePage.style.display = 'none';
+                } else {
+                    loginPage.style.display = 'flex';
+                    registerPage.style.display = 'none';
+                    homePage.style.display = 'none';
+                }
+            }
+
+            // Check if user is logged in
+            function checkLoggedInStatus() {
+                const currentUser = localStorage.getItem('currentUser');
+                if (currentUser) {
+                    const user = JSON.parse(currentUser);
+                    showHomePage(user.username);
+                }
+            }
+
+            // Register Handler
+            function handleRegister(e) {
+                e.preventDefault();
+                const username = document.getElementById('registerUsername').value;
+                const email = document.getElementById('registerEmail').value;
+                const password = document.getElementById('registerPassword').value;
+
+                // Get existing users or initialize empty array
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+
+                // Check if username already exists
+                if (users.some(user => user.username === username)) {
+                    registerError.textContent = 'Username already exists';
+                    registerError.style.display = 'block';
+                    registerSuccess.style.display = 'none';
+                    return;
+                }
+
+                // Add new user
+                users.push({ username, email, password });
+                localStorage.setItem('users', JSON.stringify(users));
+
+                // Show success message and reset form
+                registerSuccess.style.display = 'block';
+                registerError.style.display = 'none';
+                registerForm.reset();
+
+                // Switch to login page after short delay
+                setTimeout(() => switchAuthPage('login'), 2000);
+            }
+
+            // Login Handler
+            function handleLogin(e) {
+                e.preventDefault();
+                const username = document.getElementById('loginUsername').value;
+                const password = document.getElementById('loginPassword').value;
+
+                // Get users from localStorage
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+
+                // Find user
+                const user = users.find(u => u.username === username && u.password === password);
+
+                if (user) {
+                    // Store current user
+                    localStorage.setItem('currentUser', JSON.stringify(user));
+                    showHomePage(user.username);
+                    loginError.style.display = 'none';
+                    loginForm.reset();
+                } else {
+                    loginError.style.display = 'block';
+                }
+            }
+
+            // Show Home Page
+            function showHomePage(username) {
+                loginPage.style.display = 'none';
+                registerPage.style.display = 'none';
+                homePage.style.display = 'block';
+                welcomeMessage.textContent = `Welcome, ${username}!`;
+            }
+
+            // Logout Handler
+            function handleLogout() {
+                localStorage.removeItem('currentUser');
+                loginPage.style.display = 'flex';
+                homePage.style.display = 'none';
+                loginForm.reset();
+            }
+
+            // Category Click Handler
+            function handleCategoryClick(e) {
+                const category = e.target.dataset.category;
+                
+                // Update active button
+                categoryButtons.forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active');
+
+                // Display news for selected category
+                displayNews(category);
+            }
+
+            // Display News
+            function displayNews(category) {
+                newsContainer.innerHTML = '';
+                
+                newsData[category].forEach(news => {
+                    const newsCard = document.createElement('div');
+                    newsCard.className = 'news-card';
+                    newsCard.innerHTML = `
+                        <h3>${news.title}</h3>
+                        <p>${news.content}</p>
+                    `;
+                    newsContainer.appendChild(newsCard);
+                });
+            }
+        </script>
+    </body>
+    </html>
